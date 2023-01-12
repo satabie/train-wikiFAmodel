@@ -9,6 +9,7 @@ def main():
     X_train, y_train, X_test, y_test = load_dataset()
 
     # settings
+    expt_name = "M1_100"
     input_dim = X_train.shape[1]
     output_dim = y_train.shape[1]
     activation = 'linear'
@@ -41,18 +42,18 @@ def main():
 
     fig, axs = plt.subplots(1, 3, figsize=(21, 7))
     axs[0].plot(history.history['loss'])
-    axs[0].set_title('Training Loss')
+    axs[0].set_title(f'{expt_name} Training Loss')
     axs[0].set_xlabel('Epoch')
     axs[0].set_ylabel('Loss')
 
     axs[1].plot(cos_sim)
-    axs[1].set_title('Cosine Similarity')
+    axs[1].set_title(f'{expt_name} Cosine Similarity')
     axs[1].set_xlabel('Sample')
     axs[1].set_ylabel('Similarity')
 
     weights = model.get_weights()[0]
     axs[2].imshow(weights)
-    axs[2].set_title('Weight Matrix')
+    axs[2].set_title(f'{expt_name} Weight Matrix')
 
     plt.show()
 
