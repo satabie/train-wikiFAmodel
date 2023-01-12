@@ -9,7 +9,7 @@ def main():
     X_train, y_train, X_test, y_test = load_dataset()
 
     # settings
-    expt_name = "M1_100"
+    expt_name = "M1_dim100"
     input_dim = X_train.shape[1]
     output_dim = y_train.shape[1]
     activation = 'linear'
