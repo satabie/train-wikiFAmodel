@@ -20,14 +20,11 @@ def main():
     # Define the model
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Dense(output_dim, input_shape={input_dim, }, use_bias=False, activation=activation))
-
     # Compile the model
     model.compile(optimizer=optimizer, loss='mean_squared_error')
-
     # Train the model
     history = model.fit(X_train, y_train, epochs=epochs, workers=8, callbacks=[tf.keras.callbacks.History()])
-
-    model.save(f'models/{optimizer}_mse_model_epocks{epochs}.h5')
+    model.save(f'models/{optimizer}_{expt_name}.h5')
 
     # Predict using the model
     y_pred = model.predict(X_train)
