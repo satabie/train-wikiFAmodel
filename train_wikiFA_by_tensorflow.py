@@ -22,11 +22,13 @@ def main():
 
     # Define the model
     model = tf.keras.Sequential()
-    model.add(tf.keras.layers.Dense(output_dim, input_shape={input_dim, }, use_bias=False, activation=activation))
+    model.add(tf.keras.layers.Dense(output_dim, input_shape={
+              input_dim, }, use_bias=False, activation=activation))
     # Compile the model
     model.compile(optimizer=optimizer, loss=loss)
     # Train the model
-    history = model.fit(X_train, y_train, epochs=epochs, validation_data=(X_test, y_test), callbacks=[tf.keras.callbacks.History()])
+    history = model.fit(X_train, y_train, epochs=epochs, validation_data=(
+        X_test, y_test), callbacks=[tf.keras.callbacks.History()])
     model.save(f'models/{expt_name}.h5')
 
     # Predict using the model
@@ -34,8 +36,10 @@ def main():
     y_pred_test = model.predict(X_test)
 
     # Calculate cosine similarity between predicted and actual values
-    cos_sim_train = np.array([cosine_similarity(y_pred_train[i], y_train[i]) for i in range(len(y_pred_train))])
-    cos_sim_test = np.array([cosine_similarity(y_pred_test[i], y_test[i]) for i in range(len(y_pred_test))])
+    cos_sim_train = np.array([cosine_similarity(
+        y_pred_train[i], y_train[i]) for i in range(len(y_pred_train))])
+    cos_sim_test = np.array([cosine_similarity(
+        y_pred_test[i], y_test[i]) for i in range(len(y_pred_test))])
 
     print(f"sim average train: {np.sum(cos_sim_train) / len(cos_sim_train)}")
     print(f"sim average test: {np.sum(cos_sim_test) / len(cos_sim_test)}")
