@@ -23,35 +23,42 @@ def main():
     # Compile the model
     model.compile(optimizer=optimizer, loss='mean_squared_error')
     # Train the model
-    history = model.fit(X_train, y_train, epochs=epochs, workers=8, callbacks=[tf.keras.callbacks.History()])
-    model.save(f'models/{optimizer}_{expt_name}.h5')
+    # Train the model
+    history = model.fit(X_train, y_train, epochs=epochs, validation_data=(X_test, y_test), workers=8, callbacks=[tf.keras.callbacks.History()])
+    model.save(f'models/{expt_name}_{optimizer}.h5')
 
     # Predict using the model
-    y_pred = model.predict(X_train)
+    y_pred_train = model.predict(X_train)
+    y_pred_test = model.predict(X_test)
 
     # Calculate cosine similarity between predicted and actual values
-    cos_sim = np.array([cosine_similarity(y_pred[i], y_train[i]) for i in range(len(y_pred))])
+    cos_sim_train = np.array([cosine_similarity(y_pred_train[i], y_train[i]) for i in range(len(y_pred_train))])
+    cos_sim_test = np.array([cosine_similarity(y_pred_test[i], y_test[i]) for i in range(len(y_pred_test))])
 
-    # 負の類似度を除外する
-    cos_sim = cos_sim[cos_sim >= 0]
+    print(f"sim average train: {np.sum(cos_sim_train) / len(cos_sim_train)}")
+    print(f"sim average test: {np.sum(cos_sim_test) / len(cos_sim_test)}")
 
-    print(f"sim average: {np.sum(cos_sim) / len(cos_sim)}")
-
-    fig, axs = plt.subplots(1, 3, figsize=(21, 7))
-    axs[0].plot(history.history['loss'])
-    axs[0].set_title(f'{expt_name} Training Loss')
+    # グラフを描画
+    fig, axs = plt.subplots(1, 2, figsize=(15, 5))
+    # fig, axs = plt.subplots(1, 3, figsize=(21, 7))
+    axs[0].plot(history.history['loss'], label='train_loss')
+    axs[0].plot(history.history['val_loss'], label='test_loss')
+    axs[0].set_title(f'Training Loss')
     axs[0].set_xlabel('Epoch')
     axs[0].set_ylabel('Loss')
+    axs[0].legend()
 
-    axs[1].plot(cos_sim)
-    axs[1].set_title(f'{expt_name} Cosine Similarity')
+    axs[1].plot(cos_sim_train, label='sim_train')
+    axs[1].plot(cos_sim_test, label='sim_test')
+    axs[1].set_title(f'Cosine Similarity')
     axs[1].set_xlabel('Sample')
     axs[1].set_ylabel('Similarity')
 
-    weights = model.get_weights()[0]
-    axs[2].imshow(weights)
-    axs[2].set_title(f'{expt_name} Weight Matrix')
+    # weights = model.get_weights()[0]
+    # axs[2].imshow(weights)
+    # axs[2].set_title(f'Weight Matrix')
 
+    fig.suptitle(f'{expt_name}_{optimizer} Results')
     plt.show()
 
     print(model.summary())
