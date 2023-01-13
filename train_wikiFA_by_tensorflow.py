@@ -56,7 +56,7 @@ def main():
     axs[1].set_title(f'Cosine Similarity')
     axs[1].set_xlabel('Sample')
     axs[1].set_ylabel('Similarity')
-    axs[0].legend()
+    axs[1].legend()
 
     # weights = model.get_weights()[0]
     # axs[2].imshow(weights)
