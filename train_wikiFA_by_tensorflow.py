@@ -13,19 +13,22 @@ def main():
     input_dim = X_train.shape[1]
     output_dim = y_train.shape[1]
     activation = 'linear'
+    loss = 'mean_squared_error'
     optimizer = 'adam'
     epochs = 100
     # dropout
+
+    expt_name = expt_name + "_" + optimizer
 
     # Define the model
     model = tf.keras.Sequential()
     model.add(tf.keras.layers.Dense(output_dim, input_shape={input_dim, }, use_bias=False, activation=activation))
     # Compile the model
-    model.compile(optimizer=optimizer, loss='mean_squared_error')
+    model.compile(optimizer=optimizer, loss=loss)
     # Train the model
     # Train the model
     history = model.fit(X_train, y_train, epochs=epochs, validation_data=(X_test, y_test), workers=8, callbacks=[tf.keras.callbacks.History()])
-    model.save(f'models/{expt_name}_{optimizer}.h5')
+    model.save(f'models/{expt_name}.h5')
 
     # Predict using the model
     y_pred_train = model.predict(X_train)
@@ -58,7 +61,7 @@ def main():
     # axs[2].imshow(weights)
     # axs[2].set_title(f'Weight Matrix')
 
-    fig.suptitle(f'{expt_name}_{optimizer} Results')
+    fig.suptitle(f'{expt_name} Results')
     plt.show()
 
     print(model.summary())
