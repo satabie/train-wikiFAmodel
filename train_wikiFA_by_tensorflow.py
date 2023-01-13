@@ -26,7 +26,6 @@ def main():
     # Compile the model
     model.compile(optimizer=optimizer, loss=loss)
     # Train the model
-    # Train the model
     history = model.fit(X_train, y_train, epochs=epochs, validation_data=(X_test, y_test), callbacks=[tf.keras.callbacks.History()])
     model.save(f'models/{expt_name}.h5')
 
